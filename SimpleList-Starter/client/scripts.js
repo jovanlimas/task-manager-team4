@@ -24,7 +24,20 @@ function ShowList() {
 }
 
 async function GetList() {
+  try {
+    const response = await fetch("/list");
 
+    if (!response.ok) {
+      throw new Error("Response was not ok.");
+    }
+
+    theList = await response.json();
+    ShowList();
+
+  } catch (error) {
+    console.error(error);
+    result.innerHTML = "Failed to load list.";
+  }
 }
 
 async function WriteList() {

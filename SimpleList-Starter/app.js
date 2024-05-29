@@ -10,10 +10,15 @@ const app = express();
 app.use(express.static("./Client"));
 app.use(express.json());
 
-// Define HTTP routes listenting for requests
-app.get("/api", async (req,res) => {
-
-})
+// Define HTTP routes listening for requests
+app.get("/list", async (req, res) => {
+  const data = await fm.ReadData();
+  if (data) {
+    res.json(data);
+  } else {
+    res.status(500);
+  }
+});
 
 app.post("/api", async (req,res) => {
 
@@ -26,7 +31,7 @@ app.all("*", (req,res) => {
 
 // Create a server
 const appName = "Simple List";
-const port = 5000;
+const port = 3000;
 app.listen(port, () => {
   console.log(`App ${appName} is running on port ${port}`);
 })
