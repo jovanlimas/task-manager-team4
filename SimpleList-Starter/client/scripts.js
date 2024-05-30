@@ -25,13 +25,7 @@ function ShowList() {
 
 async function GetList() {
   try {
-    const response = await fetch("/list");
-
-    if (!response.ok) {
-      throw new Error("Response was not ok.");
-    }
-
-    theList = await response.json();
+    theList = await http.get("/list");
     ShowList();
 
   } catch (error) {
@@ -41,18 +35,33 @@ async function GetList() {
 }
 
 async function WriteList() {
-
+  try {
+    await http.post("/list", theList);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 /* Listener Functions */
 async function httpPost(e) {
-
-  
+  const newItem = input.value;
+  if (newItem) {
+    theList.push(newItem);
+    await WriteList();
+    ShowList();
+  }
 }
 
 function httpDelete(e) {
+  const index = theList.indexOf(input.value);
 
-  
+  if (index == -1) {
+    alert("Not found.");
+  } else {
+    theList.splice(index, 1);
+    WriteList();
+    ShowList();
+  }
 }
 
 // Loading functions

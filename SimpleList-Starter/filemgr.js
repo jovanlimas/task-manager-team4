@@ -16,15 +16,17 @@ async function ReadData() {
     
   } catch (error) {
     console.error(error);
+    return [];
   }
 }
 
 async function WriteData(dataOut) {
   try {
     // Write the file
+    await fs.writeFile(listDataFilePath, JSON.stringify(dataOut, null, 2));
 
   } catch (error) {
-
+    console.error();
   }
 }
 
