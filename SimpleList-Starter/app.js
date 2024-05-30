@@ -20,8 +20,13 @@ app.get("/list", async (req, res) => {
   }
 });
 
-app.post("/api", async (req,res) => {
-
+app.post("/list", async (req,res) => {
+  try {
+    await fm.WriteData(req.body);
+    res.status(200);
+  } catch (error) {
+    res.status(500);
+  }
 })
 
 // page not found route
