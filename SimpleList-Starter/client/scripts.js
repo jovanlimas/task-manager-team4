@@ -13,20 +13,13 @@ const delButton = document.querySelector(".del-btn");
 addButton.addEventListener("click", httpPost);
 delButton.addEventListener("click", httpDelete);
 
-// btn animation
-let isShadow = false;
-function addShadow() {
-  isShadow = !isShadow;
-  if (isShadow) {
-    addButton.style.boxShadow = "1px 3px 5px";
-  }
+// Button Animations
+function handleAddButtonShadow() {
+  addButton.style.boxShadow = "1px 3px 5px";
 }
 
-function delShadow() {
-  isShadow = !isShadow;
-  if (isShadow) {
-    delButton.style.boxShadow = "1px 3px 5px";
-  }
+function handleDeleteButtonShadow() {
+  delButton.style.boxShadow = "1px 3px 5px";
 }
 
 /* Helper Functions */
