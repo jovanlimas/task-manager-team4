@@ -25,8 +25,8 @@ function handleDeleteButtonShadow() {
 /* Helper Functions */
 function ShowList() {
   let output = "<ul>";
-  for (const itm of theList) {
-    output += `<li>${itm}</li>`;
+  for (let item of theList) {
+    output += `<li>${item.name}, COMPLETED: ${item.completed}</li>`;
   }
   output += "</ul>";
   result.innerHTML = output;
@@ -35,7 +35,7 @@ function ShowList() {
 async function GetList() {
   try {
     theList = await http.get("/list");
-    console.log(theList);
+    theList = theList.task;
     ShowList();
   } catch (error) {
     console.error(error);
