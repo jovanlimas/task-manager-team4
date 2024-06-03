@@ -1,7 +1,5 @@
-// Get 3rd Party modules
 const express = require("express");
-// Get Custom built modules
-const fm = require("./filemgr");
+const connectDB = require("./connect");
 
 // Create the express http server
 const app = express();
@@ -10,23 +8,26 @@ const app = express();
 app.use(express.static("./Client"));
 app.use(express.json());
 
+// Data model (schema)
+const tasks = require("./Task.js");
+
 // Define HTTP routes listening for requests
 app.get("/list", async (req, res) => {
-  const data = await fm.ReadData();
-  if (data) {
-    res.json(data);
-  } else {
-    res.status(500);
-  }
+  try {
+    const task = await tasks.find(); 
+    res.status(200).json({task});
+  } catch {
+    res.status(500).json({msg: error});
+  };
 });
 
 app.post("/list", async (req,res) => {
-  try {
-    await fm.WriteData(req.body);
-    res.status(200);
-  } catch (error) {
-    res.status(500);
-  }
+  // try {
+  //   await fm.WriteData(req.body);
+  //   res.status(200);
+  // } catch (error) {
+  //   res.status(500);
+  // }
 })
 
 // page not found route
@@ -37,6 +38,11 @@ app.all("*", (req,res) => {
 // Create a server
 const appName = "Simple List";
 const port = 3000;
-app.listen(port, () => {
-  console.log(`App ${appName} is running on port ${port}`);
-})
+(async function () {
+  try {
+    await connectDB();
+    app.listen(port, () => {console.log(`${appName} is listening on port ${port}.`)});
+  } catch (error) {
+    console.log(error);
+  };
+})();
