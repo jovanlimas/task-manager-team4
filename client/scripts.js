@@ -29,9 +29,9 @@ function ShowList() {
   let output = "<ul>";
   for (let item of theList) {
     if (item.completed) {
-      output += `<li><s>${item.name}, COMPLETED: ${item.completed}</s></li>`;
+      output += `<li><s>${item.name}</s></li>`;
     } else {
-      output += `<li>${item.name}, COMPLETED: ${item.completed}</li>`;
+      output += `<li>${item.name}</li>`;
     }
     
   }
