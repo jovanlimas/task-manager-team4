@@ -46,15 +46,17 @@ class coreHTTP {
     }
   }
 
-  async delete(url) {
+  async delete(url, requestData) {
     const reqOptions = {
       method: "DELETE",
-      headers: {"Content-Type": "application/json"}};
-      const response = await fetch(url, reqOptions);
-      if (response.ok) {
-        return ({});
-      } else {
-        return (Promise.reject(response.status));
-      }
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(requestData)};
+
+    const response = await fetch(url, reqOptions);
+    if (response.ok) {
+      return ({});
+    } else {
+      return (Promise.reject(response.status));
+    }
   }
 }
