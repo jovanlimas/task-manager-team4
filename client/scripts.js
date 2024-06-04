@@ -32,7 +32,7 @@ function ShowList() {
   result.innerHTML = output;
 }
 
-async function GetList() {
+async function ReadTasks() {
   try {
     const response = await http.get("/list");
     theList = response.task || [];
@@ -43,7 +43,7 @@ async function GetList() {
   }
 }
 
-async function WriteList() {
+async function CreateTask() {
   try {
     const response = await http.post("/list", { name: input.value });
     console.log("response: ", response);
@@ -52,23 +52,28 @@ async function WriteList() {
   }
 }
 
+async function DeleteTask() {
+  try {
+    const response = await http.delete("/list/", { name: input.value });
+    console.log("response: ", response);
+  } catch (error) {
+    console.log("error: ", error);
+  }
+}
+
 /* Listener Functions */
 async function httpPost(e) {
   if (input.value) {
-    await WriteList();
-    await GetList();
+    await CreateTask();
+    await ReadTasks();
     ShowList();
   }
 }
 
-function httpDelete(e) {
-  const index = theList.indexOf(input.value);
-
-  if (index == -1) {
-    alert("Not found.");
-  } else {
-    theList.splice(index, 1);
-    WriteList();
+async function httpDelete(e) {
+  if (input.value) {
+    await DeleteTask();
+    await ReadTasks();
     ShowList();
   }
 }
@@ -83,7 +88,7 @@ async function main() {
   delButton.disabled = true;
   showLoading();
 
-  await GetList();
+  await ReadTasks();
 
   addButton.disabled = false;
   delButton.disabled = false;
