@@ -22,12 +22,15 @@ app.get("/list", async (req, res) => {
 });
 
 app.post("/list", async (req,res) => {
-  // try {
-  //   await fm.WriteData(req.body);
-  //   res.status(200);
-  // } catch (error) {
-  //   res.status(500);
-  // }
+  try {
+    await tasks.create({
+      name: req.body.name,
+      completed: false
+    })
+    res.status(200).json({msg: 'Task created successfully'});
+  } catch (error) {
+    res.status(500).json({msg: error.message});
+  }
 })
 
 // page not found route

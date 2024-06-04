@@ -34,8 +34,8 @@ function ShowList() {
 
 async function GetList() {
   try {
-    theList = await http.get("/list");
-    theList = theList.task;
+    const response = await http.get("/list");
+    theList = response.task || [];
     ShowList();
   } catch (error) {
     console.error(error);
@@ -45,18 +45,18 @@ async function GetList() {
 
 async function WriteList() {
   try {
-    await http.post("/list", theList);
+    const response = await http.post("/list", { name: input.value });
+    console.log("response: ", response);
   } catch (error) {
-    console.error(error);
+    console.error("error: ", error);
   }
 }
 
 /* Listener Functions */
 async function httpPost(e) {
-  const newItem = input.value;
-  if (newItem) {
-    theList.push(newItem);
+  if (input.value) {
     await WriteList();
+    await GetList();
     ShowList();
   }
 }
