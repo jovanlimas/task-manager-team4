@@ -8,10 +8,12 @@ const result = document.querySelector(".result");
 const input = document.querySelector("#listitem");
 const addButton = document.querySelector(".add-btn");
 const delButton = document.querySelector(".del-btn");
+const doneButton = document.querySelector(".done-btn");
 
 // Listeners
 addButton.addEventListener("click", httpPost);
 delButton.addEventListener("click", httpDelete);
+doneButton.addEventListener("click", httpPut);
 
 // Button Animations
 function handleAddButtonShadow() {
@@ -26,7 +28,12 @@ function handleDeleteButtonShadow() {
 function ShowList() {
   let output = "<ul>";
   for (let item of theList) {
-    output += `<li>${item.name}, COMPLETED: ${item.completed}</li>`;
+    if (item.completed) {
+      output += `<li><s>${item.name}, COMPLETED: ${item.completed}</s></li>`;
+    } else {
+      output += `<li>${item.name}, COMPLETED: ${item.completed}</li>`;
+    }
+    
   }
   output += "</ul>";
   result.innerHTML = output;
@@ -61,6 +68,15 @@ async function DeleteTask() {
   }
 }
 
+async function UpdateTask() {
+  try {
+    const response = await http.put("/list", { name: input.value })
+    console.log("response: ", response);
+  } catch (error) {
+    console.log("error: ", error);
+  }
+}
+
 /* Listener Functions */
 async function httpPost(e) {
   if (input.value) {
@@ -73,6 +89,14 @@ async function httpPost(e) {
 async function httpDelete(e) {
   if (input.value) {
     await DeleteTask();
+    await ReadTasks();
+    ShowList();
+  }
+}
+
+async function httpPut(e) {
+  if (input.value) {
+    await UpdateTask();
     await ReadTasks();
     ShowList();
   }

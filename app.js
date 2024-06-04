@@ -33,10 +33,28 @@ app.post("/list", async (req,res) => {
   }
 })
 
+app.put("/list", async (req, res) => {
+  try {
+    const response = await tasks.updateOne(
+      { name: req.body.name },
+      { completed: true }
+    )
+    console.log("number of matched documents: ", response.matchedCount);
+    res.status(200).json({msg: "Task updated successfully"});
+  } catch (error) {
+    res.status(500).json({msg: error.message});
+  }
+})
+
 app.delete("/list", async (req, res) => {
   try {
-    await tasks.deleteOne({ name: req.body.name });
-    res.status(200).json({msg: "Task deleted"});
+    const numberOfDeleted = (await tasks.deleteOne({ name: req.body.name })).deletedCount;
+    if (numberOfDeleted == 0) {
+      console.log("Task not found!");
+      res.status(500).json({msg: "Task not found."});
+    } else {
+      res.status(200).json({msg: "Task deleted."});
+    }
   } catch (error) {
     res.status(500).json({msg: error.message});
   }
